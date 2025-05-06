@@ -1,0 +1,56 @@
+>> AGREGAÇÕES
+
+1. Contar quantos jurados existem
+MATCH (j:Jurado) RETURN COUNT(*)
+
+2. Somar o total de horas jogadas por todos os jurados
+MATCH (:Jurado)-[r:JOGOU]->() RETURN SUM(r.horas)
+
+3. Calcular a média de notas dadas pelos jurados
+MATCH (:Jurado)-[r:JOGOU]->() RETURN AVG(r.nota)
+
+4. Encontrar a menor nota atribuída por um jurado
+MATCH (:Jurado)-[r:JOGOU]->() RETURN MIN(r.nota)
+
+5. Coletar todos os títulos dos jogos jogados
+MATCH (:Jurado)-[:JOGOU]->(g:Game) RETURN COLLECT(g.titulo)
+
+
+>> FUNÇÕES MATEMÁTICAS
+
+1. Valor absoluto da diferença de notas entre jogadores de Minecraft
+MATCH (g:Game{titulo:'Minecraft'})<- [r1:JOGOU]-(j1:Jurado{nome:'Gabriel'}), (g)<-[r2:JOGOU]-(j2:Jurado{nome:'Davi'})
+RETURN ABS(r1.nota - r2.nota)
+
+2. Arredondar para cima a média de horas jogadas em League of Legends
+MATCH (:Jurado)-[r:JOGOU]->(g:Game{titulo:'League of Legends'})
+RETURN CEIL(AVG(r.horas))
+
+3. Arredondar para baixo a nota média em Warzone
+MATCH (:Jurado)-[r:JOGOU]->(g:Game{titulo:'Warzone'})
+RETURN FLOOR(AVG(r.nota))
+
+4. Gerar um número aleatório
+RETURN RAND()
+
+5. Arredondar a média de horas jogadas em Minecraft para 2 casas decimais
+MATCH (:Jurado)-[r:JOGOU]->(g:Game{titulo:'Minecraft'})
+RETURN ROUND(AVG(r.horas), 2)
+
+
+>> FUNÇÕES DE STRING
+
+1. Pegar os 3 primeiros caracteres dos nomes dos jurados
+MATCH (j:Jurado) RETURN LEFT(j.nome, 3)
+
+2. Pegar os 4 últimos caracteres dos títulos dos jogos
+MATCH (g:Game) RETURN RIGHT(g.titulo, 4)
+
+3. Transformar os nomes das lojas em maiúsculo
+MATCH (l:Loja) RETURN TOUPPER(l.nome)
+
+4. Substituir a letra "o" por "0" nos títulos dos jogos
+MATCH (g:Game) RETURN REPLACE(g.titulo, 'o', '0')
+
+5. Dividir os nomes dos jurados em lista de letras
+MATCH (j:Jurado) RETURN SPLIT(j.nome, '')
